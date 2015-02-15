@@ -21,12 +21,14 @@ public class Main {
 		Integer[] input = readInFile(inputFile, isHex);
 		validateLength(key, 4, "key");
 		Integer[] iv = null;
-		// IV only valid for CBC and CTR modes
+        
+            // IV only valid for CBC and CTR modes
 		if (!mode.equals(TinyE.Mode.ECB)) {
 			iv = readInFile(ivFile, true);
 			validateLength(iv, 2, "IV");
 		}
-		// have all we need, now perform encyption / decryption
+        
+            // have all we need, now perform encyption / decryption
 		TinyE cipher = new TinyE();
 		Integer[] output = null;
 		if (isEncrypt) {
@@ -37,7 +39,8 @@ public class Main {
 			output = cipher.decrypt(input, key, mode, iv);
 		}
 		validateLength(output, input.length, "output");
-		// done. now write the results
+        
+            // done. now write the results
 		writeOutputFile(output, outputFile, isHex);
 	}
 	
@@ -54,19 +57,21 @@ public class Main {
 	private static void parseArgs(String[] args) {
 		try {
 			if (args.length >= 6) {
-				// handle 1st arg, which is either E(ncrypt) or D(ecrypt)
+                    // handle 1st arg, which is either E(ncrypt) or D(ecrypt)
 				if (args[0].equalsIgnoreCase("E")) {
 					isEncrypt = true;
 				} else if (args[0].equalsIgnoreCase("D")) {
 					isEncrypt = false;
 				} else { throw new Exception(); }
-				// handle 2nd arg, which is either H(ex) or S(tring)
+                
+                    // handle 2nd arg, which is either H(ex) or S(tring)
 				if (args[1].equalsIgnoreCase("H")) {
 					isHex = true;
 				} else if (args[1].equalsIgnoreCase("S")) {
 					isHex = false;
 				} else { throw new Exception(); }
-				// handle 3rd arg, which is either ECB, CBC or CTR
+                
+                    // handle 3rd arg, which is either ECB, CBC or CTR
 				if (args[2].equalsIgnoreCase("ECB")) {
 					mode = TinyE.Mode.ECB;
 				} else if (args[2].equalsIgnoreCase("CBC")) {
@@ -74,11 +79,13 @@ public class Main {
 				} else if (args[2].equalsIgnoreCase("CTR")) {
 					mode = TinyE.Mode.CTR;
 				} else { throw new Exception(); }
-				// 4th - 6th are filenames
+                
+                    // 4th - 6th are filenames
 				inputFile = args[3];
 				outputFile = args[4];
 				keyFile = args[5];
-				// only in CBC and CTR modes do we have to check for IV file name
+                
+                    // only in CBC and CTR modes do we have to check for IV file name
 				if (!mode.equals(TinyE.Mode.ECB)) {
 					if (args.length == 7) {
 						ivFile = args[6];
@@ -89,13 +96,13 @@ public class Main {
 			}
 		} catch (Exception e) {
 			System.out.println("Usage: E|D H|S ECB|CBC|CTR inputfile outputfile keyfile [ivfile]");
-			System.out.println("-E = encrpypt, -D = decrypy");
+			System.out.println("-E = encrypt, -D = decrypt");
 			System.out.println("-H = read fileIn as hex values, -S = read fileIn as a string");
 			System.out.println("-ECB = Electronic Code Book mode, -CBC = Cipher Block Chaining mode, -CTR = Counter mode");
 			System.out.println("inputfile = input file name");
 			System.out.println("outputfile = output file name. File will be written out same as read in, either hex or strings");
-			System.out.println("keyfile = key file name. Must contain 32 hexadecimal characters");
-			System.out.println("ivfile = applies only to CBC and CTR modes. Initialization vector file name. Must contain 32 hexadecimal characters");
+			System.out.println("keyfile = key file name. File must contain 32 hexadecimal characters");
+			System.out.println("ivfile = applies only to CBC and CTR modes. Initialization vector file name. File must contain 32 hexadecimal characters.");
 			System.exit(1);
 		}
 	}
@@ -113,8 +120,10 @@ public class Main {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		// for debugging only
+        
+            // for debugging only
 		System.out.println("read in from file: " + filename);
+        
 		if (isHex) {
 			String s = new String(fileData).trim();
 			return Tools.convertFromHexStringToInts(s);

@@ -11,10 +11,10 @@ public class Tools {
         for (int i = 0; i < ints.length; i++) {
             int a,b,c,d;
             
-            a = (j   < bs.length ? bs[j]   : 0x00) << 24;
-            b = (j+1 < bs.length ? bs[j+1] : 0x00) << 16 ;
-            c = (j+2 < bs.length ? bs[j+2] : 0x00) << 8 ;
-            d = (j+3 < bs.length ? bs[j+3] : 0x00);
+            a = (j   < bs.length ? bs[j] : 0) << 24;
+            b = (j+1 < bs.length ? bs[j+1] : 0) << 16 ;
+            c = (j+2 < bs.length ? bs[j+2] : 0) << 8 ;
+            d = (j+3 < bs.length ? bs[j+3] : 0);
             
             ints[i] = a | b | c | d;
             
@@ -36,6 +36,9 @@ public class Tools {
 	
 	public static byte[] convertFromIntsToBytes(Integer[] ints) {
         byte[] bytes = new byte[ints.length * 4];
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = 0xf;
+        }
         int j = 0;
         for (int i = 0; i < ints.length; i++) {
             
@@ -55,22 +58,23 @@ public class Tools {
     
     public static void main (String[] args) {
         String str = "Hello world!";
-        try {
-            BigInteger test = new BigInteger(str.getBytes("UTF-8"));
-            Integer[] testInt = {20};
             
-            System.out.println("Initial value: " + Integer.toBinaryString(testInt[0]));
-            
-            byte[] bytes = convertFromIntsToBytes(testInt);
-            System.out.println("Converted to: " + bytes[0]);
-           
-            testInt = convertFromBytesToInts(bytes);
-            System.out.println("End value: " + Integer.toBinaryString(testInt[0]));
-        }
-        
-        catch (UnsupportedEncodingException e) {
-            
-        }
+        Integer[] testInt = {1};
+
+        System.out.println("Initial value: " + Integer.toBinaryString(testInt[0]));
+
+        byte[] bytes = convertFromIntsToBytes(testInt);
+        System.out.println("Converted to: " + Integer.toBinaryString(bytes[0]));
+
+        testInt = convertFromBytesToInts(bytes);
+        System.out.println("End value: " + Integer.toBinaryString(testInt[0]));
+
+        int i = (((1 & 0xff) << 24) |
+                 ((-10 & 0xff) << 16) |
+                 ((-100 & 0xff) << 8) |
+                 ((-1 & 0xff)));
+        System.out.println(i);
+        System.out.println(i);
     }
 
 }
