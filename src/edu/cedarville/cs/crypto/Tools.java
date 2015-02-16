@@ -1,5 +1,6 @@
 package edu.cedarville.cs.crypto;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
 public class Tools {
@@ -36,7 +37,7 @@ public class Tools {
      * @return Integer[] array created from input hex string
      */
     public static Integer[] convertFromHexStringToInts(String s) {
-        int numOfHexStrings = s.length() / 4 + (s.length() % 4 != 0 ? 1 : 0);
+        int numOfHexStrings = s.length() / 8 + (s.length() % 8 != 0 ? 1 : 0);
 
         String[] strings = new String[numOfHexStrings];
 
@@ -45,20 +46,22 @@ public class Tools {
 
         for (int i = 0; i < numOfHexStrings; i++) {
 
-            strings[i] = s.substring(j, (j + 4 > s.length() ? s.length() - j : j + 4));
-            System.out.println("Got: " + strings[i]);
-            if (strings[i].length() < 4) {
-                for (int k = 0; k < (4 - strings[i].length()); k++) {
-                    strings[i] = "0" + strings[i];
+            strings[i] = s.substring(j, (s.length() - j < 8 ? s.length() - j : j + 8));
+            
+            if (strings[i].length() < 8) {
+                String str = "";
+                for (int k = 0; k < (8 - strings[i].length()); k++) {
+                    str += "0";
                 }
+                strings[i] = str + strings[i];
             }
-            j += 4;
+            j += 8;
         }
 
         Integer[] ints = new Integer[numOfHexStrings];
         for (int i = 0; i < strings.length; i++) {
             BigInteger uncipheredInt = new BigInteger(strings[i], 16);
-            ints[i] = uncipheredInt.intValue();
+            ints[strings.length - i - 1] = uncipheredInt.intValue();
         }
 
         return ints;
@@ -75,10 +78,10 @@ public class Tools {
         int j = 0;
         for (int i = 0; i < ints.length; i++) {
 
-            bytes[j] |= ints[i];
-            bytes[j + 1] |= ints[i] >>> 8;
-            bytes[j + 2] |= ints[i] >>> 16;
-            bytes[j + 3] |= ints[i] >>> 24;
+            bytes[j + 3] |= ints[i];
+            bytes[j + 2] |= ints[i] >>> 8;
+            bytes[j + 1] |= ints[i] >>> 16;
+            bytes[j] |= ints[i] >>> 24;
 
             j += 4;
         }
@@ -86,10 +89,16 @@ public class Tools {
     }
 
     public static String convertFromIntsToHexString(Integer[] ints) {
-        printIntArrayAsBinary(ints);
-        String hexStr = new String ();//convertFromIntsToBytes(ints));
+        String hexStr = "";
         
-        System.out.println(hexStr);
+        try {
+            hexStr = new String (convertFromIntsToBytes(ints), "UTF-8");
+        }
+        catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            e.getMessage();
+            System.exit(1);
+        }
         return hexStr;
         //return new String(convertFromIntsToBytes(ints));
     }
@@ -119,7 +128,7 @@ public class Tools {
     }
 
     public static void main(String[] args) {
-        Integer[] testInt = {0xf, 0x00111100};
+        Integer[] testInt = {0xf, 0x00111100, 0x01020304};
 
         printIntArrayAsBinary(testInt);
 
@@ -131,9 +140,9 @@ public class Tools {
 
         printIntArrayAsBinary(testInt);
 
-        String s = "f";
+        String s = "76543210";
         printIntArrayAsBinary(convertFromHexStringToInts(s));
-        System.out.println(convertFromIntsToHexString(convertFromHexStringToInts(s)));
+        //System.out.println("Hex string: " + convertFromIntsToHexString(convertFromHexStringToInts(s)));
     }
 
 }
