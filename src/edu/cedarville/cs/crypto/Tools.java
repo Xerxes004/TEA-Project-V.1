@@ -4,6 +4,12 @@ import java.math.BigInteger;
 
 public class Tools {
 
+    /**
+     * Converts a byte[] array into an Integer[] array
+     *
+     * @param bs byte[] array to be converted
+     * @return Integer[] array created from byte[] array
+     */
     public static Integer[] convertFromBytesToInts(byte[] bs) {
         Integer[] ints = new Integer[bs.length / 4 + (bs.length % 4 != 0 ? 1 : 0)];
         int j = 0;
@@ -21,24 +27,46 @@ public class Tools {
         }
         return ints;
     }
-
+    /**
+     * Converts a string of hex characters into an Integer[] array using
+     * BigInteger.
+     *
+     * @param s string of hex characters
+     * @return Integer[] array created from input hex string
+     */
     public static Integer[] convertFromHexStringToInts(String s) {
-        int numOfHexStrings = s.length()/4 + (s.length() % 4 != 0 ? 1 : 0);
+        int numOfHexStrings = s.length() / 4 + (s.length() % 4 != 0 ? 1 : 0);
+        
         String[] strings = new String[numOfHexStrings];
+        
         int j = 0;
+        System.out.println("String is " + s);
+        
         for (int i = 0; i < numOfHexStrings; i++) {
-            strings[i] = s.substring(j, j+4);
+            
+            strings[i] = s.substring(j, (j + 4 > s.length() ? s.length() - j : j + 4));
+            System.out.println("Got: " + strings[i]);
+            if (strings[i].length() < 4) {
+                for (int k = 0; k < (4 - strings[i].length()); k++) {
+                    strings[i] = "0" + strings[i];
+                }
+            }
             j += 4;
         }
+        
         Integer[] ints = new Integer[numOfHexStrings];
-        for (int i = 0; i < numOfHexStrings; i++) {
-            BigInteger uncipheredInt = new BigInteger(strings[i], 8);
+        for (int i = 0; i < strings.length; i++) {
+            BigInteger uncipheredInt = new BigInteger(strings[i], 16);
             ints[i] = uncipheredInt.intValue();
         }
-        
+
         return ints;
     }
-
+    /**
+     * Converts from an Integer[] array to a byte[] array
+     * @param ints
+     * @return 
+     */
     public static byte[] convertFromIntsToBytes(Integer[] ints) {
         byte[] bytes = new byte[ints.length * 4];
         int j = 0;
@@ -83,9 +111,7 @@ public class Tools {
     }
 
     public static void main(String[] args) {
-        String str = "Hello world!";
-
-        Integer[] testInt = {100, 0x00111100};
+        Integer[] testInt = {0xf, 0x00111100};
 
         printIntArrayAsBinary(testInt);
 
@@ -97,12 +123,8 @@ public class Tools {
 
         printIntArrayAsBinary(testInt);
 
-        int i = (((1 & 0xff) << 24)
-                | ((-10 & 0xff) << 16)
-                | ((-100 & 0xff) << 8)
-                | ((-1 & 0xff)));
-        System.out.println(i);
-        System.out.println(i);
+        String s = "f";
+        printIntArrayAsBinary(convertFromHexStringToInts(s));
     }
 
 }
