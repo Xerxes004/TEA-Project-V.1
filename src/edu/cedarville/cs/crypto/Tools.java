@@ -62,6 +62,7 @@ public class Tools {
         for (int i = 0; i < strings.length; i++) {
             BigInteger uncipheredInt = new BigInteger(strings[i], 16);
             ints[strings.length - i - 1] = uncipheredInt.intValue();
+            System.out.println("::" + Integer.toHexString(ints[strings.length - i - 1]));
         }
 
         return ints;
@@ -128,7 +129,7 @@ public class Tools {
     }
 
     public static void main(String[] args) {
-        Integer[] testInt = {0xf, 0x00111100, 0x01020304};
+       /* Integer[] testInt = {0xf, 0x00111100, 0x01020304};
 
         printIntArrayAsBinary(testInt);
 
@@ -138,9 +139,9 @@ public class Tools {
 
         testInt = convertFromBytesToInts(bytes);
 
-        printIntArrayAsBinary(testInt);
+        printIntArrayAsBinary(testInt);*/
 
-        String s = "76543210";
+        String s = "a56babcd00000000ffffffffabcdef01";
         printIntArrayAsBinary(convertFromHexStringToInts(s));
         //System.out.println("Hex string: " + convertFromIntsToHexString(convertFromHexStringToInts(s)));
     }
