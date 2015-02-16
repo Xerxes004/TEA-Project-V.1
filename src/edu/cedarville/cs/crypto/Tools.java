@@ -141,7 +141,7 @@ public class Tools {
 
         printIntArrayAsBinary(testInt);*/
 
-        String s = "a56babcd00000000ffffffffabcdef01";
+        String s = "ae";
         printIntArrayAsBinary(convertFromHexStringToInts(s));
         //System.out.println("Hex string: " + convertFromIntsToHexString(convertFromHexStringToInts(s)));
     }
