@@ -46,7 +46,7 @@ public class Tools {
 
         for (int i = 0; i < numOfHexStrings; i++) {
 
-            strings[i] = s.substring(j, (s.length() - j < 8 ? s.length() - j : j + 8));
+            strings[i] = s.substring(j, j + (s.length() - j < 8 ? s.length() - j : 8));
             
             if (strings[i].length() < 8) {
                 String str = "";
