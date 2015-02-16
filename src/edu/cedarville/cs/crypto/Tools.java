@@ -27,6 +27,7 @@ public class Tools {
         }
         return ints;
     }
+
     /**
      * Converts a string of hex characters into an Integer[] array using
      * BigInteger.
@@ -36,14 +37,14 @@ public class Tools {
      */
     public static Integer[] convertFromHexStringToInts(String s) {
         int numOfHexStrings = s.length() / 4 + (s.length() % 4 != 0 ? 1 : 0);
-        
+
         String[] strings = new String[numOfHexStrings];
-        
+
         int j = 0;
         System.out.println("String is " + s);
-        
+
         for (int i = 0; i < numOfHexStrings; i++) {
-            
+
             strings[i] = s.substring(j, (j + 4 > s.length() ? s.length() - j : j + 4));
             System.out.println("Got: " + strings[i]);
             if (strings[i].length() < 4) {
@@ -53,7 +54,7 @@ public class Tools {
             }
             j += 4;
         }
-        
+
         Integer[] ints = new Integer[numOfHexStrings];
         for (int i = 0; i < strings.length; i++) {
             BigInteger uncipheredInt = new BigInteger(strings[i], 16);
@@ -62,10 +63,12 @@ public class Tools {
 
         return ints;
     }
+
     /**
      * Converts from an Integer[] array to a byte[] array
+     *
      * @param ints
-     * @return 
+     * @return
      */
     public static byte[] convertFromIntsToBytes(Integer[] ints) {
         byte[] bytes = new byte[ints.length * 4];
@@ -83,7 +86,7 @@ public class Tools {
     }
 
     public static String convertFromIntsToHexString(Integer[] ints) {
-        return null;
+        return new String(convertFromIntsToBytes(ints));
     }
 
     private static void printByteArrayAsBinary(byte[] bytes) {
