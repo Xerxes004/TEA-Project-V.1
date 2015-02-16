@@ -86,7 +86,12 @@ public class Tools {
     }
 
     public static String convertFromIntsToHexString(Integer[] ints) {
-        return new String(convertFromIntsToBytes(ints));
+        printIntArrayAsBinary(ints);
+        String hexStr = new String ();//convertFromIntsToBytes(ints));
+        
+        System.out.println(hexStr);
+        return hexStr;
+        //return new String(convertFromIntsToBytes(ints));
     }
 
     private static void printByteArrayAsBinary(byte[] bytes) {
@@ -128,6 +133,7 @@ public class Tools {
 
         String s = "f";
         printIntArrayAsBinary(convertFromHexStringToInts(s));
+        System.out.println(convertFromIntsToHexString(convertFromHexStringToInts(s)));
     }
 
 }
