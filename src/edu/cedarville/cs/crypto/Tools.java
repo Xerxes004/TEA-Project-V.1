@@ -10,10 +10,10 @@ public class Tools {
         for (int i = 0; i < ints.length; i++) {
             int a, b, c, d;
 
-            a = (j < bs.length ? bs[j] : 0) << 24;
-            b = (j + 1 < bs.length ? bs[j + 1] : 0) << 16;
-            c = (j + 2 < bs.length ? bs[j + 2] : 0) << 8;
-            d = (j + 3 < bs.length ? bs[j + 3] : 0);
+            a = (j + 3 < bs.length ? bs[j + 3] : 0) << 24;
+            b = (j + 2 < bs.length ? bs[j + 2] : 0) << 16;
+            c = (j + 1 < bs.length ? bs[j + 1] : 0) << 8;
+            d = (j < bs.length ? bs[j] : 0);
 
             ints[i] = a | b | c | d;
 
@@ -23,15 +23,20 @@ public class Tools {
     }
 
     public static Integer[] convertFromHexStringToInts(String s) {
-
-        BigInteger uncipheredInt = new BigInteger(s, 8);
-
-        int numOfBytes = uncipheredInt.bitLength() / 8 + (uncipheredInt.bitLength() % 8 == 0 ? 1 : 0);
-        System.out.println("Number of bytes in unciphered file: " + numOfBytes);
+        int numOfHexStrings = s.length()/4 + (s.length() % 4 != 0 ? 1 : 0);
+        String[] strings = new String[numOfHexStrings];
+        int j = 0;
+        for (int i = 0; i < numOfHexStrings; i++) {
+            strings[i] = s.substring(j, j+4);
+            j += 4;
+        }
+        Integer[] ints = new Integer[numOfHexStrings];
+        for (int i = 0; i < numOfHexStrings; i++) {
+            BigInteger uncipheredInt = new BigInteger(strings[i], 8);
+            ints[i] = uncipheredInt.intValue();
+        }
         
-        Integer[] uncipheredInts = new Integer[numOfBytes];
-
-        return null;
+        return ints;
     }
 
     public static byte[] convertFromIntsToBytes(Integer[] ints) {
@@ -52,9 +57,9 @@ public class Tools {
     public static String convertFromIntsToHexString(Integer[] ints) {
         return null;
     }
-    
+
     private static void printByteArrayAsBinary(byte[] bytes) {
-        System.out.print("Byte array: ");
+        System.out.print("Printing ");
         String[] strings = new String[bytes.length];
         for (int i = 0; i < bytes.length; i++) {
             strings[i] = Integer.toBinaryString(bytes[i]);
@@ -65,49 +70,33 @@ public class Tools {
             strings[i] = s + strings[i];
         }
         for (int i = 0; i < bytes.length; i++) {
-            if (i%4 == 0) {
+            if (i % 4 == 0) {
                 System.out.println("");
             }
             System.out.print(strings[i] + " ");
         }
         System.out.println("\n");
     }
-    
+
     private static void printIntArrayAsBinary(Integer[] ints) {
-        System.out.print("Integer array: ");
-        String[] strings = new String[ints.length];
-        for (int i = 0; i < ints.length; i++) {
-            strings[i] = Integer.toBinaryString(ints[i]);
-            String s = "";
-            for (int j = 0; j < 8 - strings[i].length(); j++) {
-                s += "0";
-            }
-            strings[i] = s + strings[i];
-        }
-        for (int i = 0; i < ints.length; i++) {
-            if (i%4 == 0) {
-                System.out.println("");
-            }
-            System.out.print(strings[i] + " ");
-        }
-        System.out.println("\n");
+        printByteArrayAsBinary(convertFromIntsToBytes(ints));
     }
 
     public static void main(String[] args) {
         String str = "Hello world!";
 
-        Integer[] testInt = {0x11000011, 0x00111100};
+        Integer[] testInt = {100, 0x00111100};
 
         printIntArrayAsBinary(testInt);
-        
+
         byte[] bytes = convertFromIntsToBytes(testInt);
 
         printByteArrayAsBinary(bytes);
-       
+
         testInt = convertFromBytesToInts(bytes);
 
         printIntArrayAsBinary(testInt);
-        
+
         int i = (((1 & 0xff) << 24)
                 | ((-10 & 0xff) << 16)
                 | ((-100 & 0xff) << 8)
