@@ -16,10 +16,10 @@ public class Tools {
         for (int i = 0; i < ints.length; i++) {
             int a, b, c, d;
 
-            a = (j     < bs.length ? bs[j] : 0) << 24;
-            b = (j + 1 < bs.length ? bs[j + 1] : 0) << 16;
-            c = (j + 2 < bs.length ? bs[j + 2] : 0) << 8;
-            d = (j + 3 < bs.length ? bs[j + 3] : 0);
+            a = (j     < bs.length ? bs[j]&0xff : 0) << 24;
+            b = (j + 1 < bs.length ? bs[j + 1]&0xff : 0) << 16;
+            c = (j + 2 < bs.length ? bs[j + 2]&0xff : 0) << 8;
+            d = (j + 3 < bs.length ? bs[j + 3]&0xff : 0);
 
             ints[i] = a | b | c | d;
 

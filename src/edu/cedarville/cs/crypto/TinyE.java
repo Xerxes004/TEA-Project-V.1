@@ -75,8 +75,8 @@ public class TinyE {
                 int R = plaintext[i + 1];
                 for (Integer j = 0; j < 32; j++) {
                     sum += DELTA;
-                    L += ((R << 4) + key[0]) ^ (R + sum) ^ ((R >>> 5) + key[1]);
-                    R += ((L << 4) + key[2]) ^ (L + sum) ^ ((L >>> 5) + key[3]);                    
+                    L += ((R << 4) + key[0]) ^ (R + sum) ^ ((R >> 5) + key[1]);
+                    R += ((L << 4) + key[2]) ^ (L + sum) ^ ((L >> 5) + key[3]);                    
                 }
                 sum = 0;
                 ciphertext[i] = L;
@@ -97,8 +97,8 @@ public class TinyE {
                 int R = plaintext[i + 1] ^ xorer[1];
                 for (Integer j = 0; j < 32; j++) {
                     sum += DELTA;
-                    L += ((R << 4) + key[0]) ^ (R + sum) ^ ((R >>> 5) + key[1]);
-                    R += ((L << 4) + key[2]) ^ (L + sum) ^ ((L >>> 5) + key[3]);                 
+                    L += ((R << 4) + key[0]) ^ (R + sum) ^ ((R >> 5) + key[1]);
+                    R += ((L << 4) + key[2]) ^ (L + sum) ^ ((L >> 5) + key[3]);                 
                 }
                 sum = 0;
                 xorer[0] = L;
@@ -121,8 +121,8 @@ public class TinyE {
                 int R = xorer[1];
                 for (Integer j = 0; j < 32; j++) {
                     sum += DELTA;
-                    L += ((R << 4) + key[0]) ^ (R + sum) ^ ((R >>> 5) + key[1]);
-                    R += ((L << 4) + key[2]) ^ (L + sum) ^ ((L >>> 5) + key[3]);                    
+                    L += ((R << 4) + key[0]) ^ (R + sum) ^ ((R >> 5) + key[1]);
+                    R += ((L << 4) + key[2]) ^ (L + sum) ^ ((L >> 5) + key[3]);                    
                 }
                 sum = 0;
                 xorer[0] += 1;
@@ -169,11 +169,11 @@ public class TinyE {
                 //sum = DELTA << 5;
                 for (Integer j = 0; j < 32; j++) {
                     
-                    R -= ((L << 4) + key[2]) ^ (L + sum) ^ ((L >>> 5) + key[3]);
-                    L -= ((R << 4) + key[0]) ^ (R + sum) ^ ((R >>> 5) + key[1]);
+                    R -= ((L << 4) + key[2]) ^ (L + sum) ^ ((L >> 5) + key[3]);
+                    L -= ((R << 4) + key[0]) ^ (R + sum) ^ ((R >> 5) + key[1]);
                     sum -= DELTA;
                 }
-                
+                sum = DELTA << 5;
                 plaintext[i] = L;
                 plaintext[i + 1] = R;
             }
@@ -187,8 +187,8 @@ public class TinyE {
                 int R = ciphertext[i + 1];
                 for (Integer j = 0; j < 32; j++) {
                     
-                    R -= ((L << 4) + key[2]) ^ (L + (int) sum) ^ ((L >>> 5) + key[3]);
-                    L -= ((R << 4) + key[0]) ^ (R + (int) sum) ^ ((R >>> 5) + key[1]);
+                    R -= ((L << 4) + key[2]) ^ (L + (int) sum) ^ ((L >> 5) + key[3]);
+                    L -= ((R << 4) + key[0]) ^ (R + (int) sum) ^ ((R >> 5) + key[1]);
                     sum -= DELTA;
                 }
                 sum = DELTA << 5;
@@ -205,16 +205,16 @@ public class TinyE {
             for (Integer i = 0; i < ciphertext.length; i += 2) {
                 int L = xorer[0];
                 int R = xorer[1];
+                sum = 0;
                 for (Integer j = 0; j < 32; j++) {
-                    
-                    R -= ((L << 4) + key[2]) ^ (L + (int) sum) ^ ((L >>> 5) + key[3]);
-                    L -= ((R << 4) + key[0]) ^ (R + (int) sum) ^ ((R >>> 5) + key[1]);
-                    sum -= DELTA;
+                    sum += DELTA;
+                    L += ((R << 4) + key[0]) ^ (R + sum) ^ ((R >> 5) + key[1]);
+                    R += ((L << 4) + key[2]) ^ (L + sum) ^ ((L >> 5) + key[3]);                    
                 }
-                sum = DELTA << 5;
+                
                 plaintext[i] = L ^ ciphertext[i];
                 plaintext[i + 1] = R ^ ciphertext[i + 1];
-                xorer[0] += 1;                
+                xorer[1] += 1;
             }            
         }
         return plaintext;

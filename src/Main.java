@@ -18,7 +18,7 @@ public class Main {
 
     public static void main(String[] args) {
         //String[] test = {"E", "H", "ECB", "src/testplainfile.txt", "src/testoutput.txt", "src/key.txt"};
-        String[] test = {"D","H","ECB","src/cipher-ECB-H.txt","src/decrypt_test.txt","src/key.txt"};
+        String[] test = {"D","S","ECB","src/cipher-ECB-S.txt","src/decrypt_test1.txt","src/key.txt","src/iv.txt"};
         parseArgs(test);
         Integer[] key = readInFile(keyFile, true);
         Integer[] input = readInFile(inputFile, isHex);
