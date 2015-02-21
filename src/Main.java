@@ -17,8 +17,8 @@ public class Main {
     private static String ivFile;
 
     public static void main(String[] args) {
-        //String[] test = {"E", "H", "ECB", "src/testplainfile.txt", "src/testoutput.txt", "src/key.txt"};
-        String[] test = {"D","S","ECB","src/cipher-ECB-S.txt","src/decrypt_test1.txt","src/key.txt","src/iv.txt"};
+       // String[] test = {"E", "S", "CTR", "src/testplainfile.txt", "src/testoutput.txt", "src/key.txt","src/iv.txt"};
+        String[] test = {"D","S","CTR","src/cipher-CTR-S.txt","src/decrypt_test1.txt","src/key.txt","src/iv.txt"};
         parseArgs(test);
         Integer[] key = readInFile(keyFile, true);
         Integer[] input = readInFile(inputFile, isHex);
