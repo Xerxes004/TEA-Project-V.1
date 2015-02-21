@@ -36,7 +36,7 @@ public class Tools {
      * @return Integer[] array created from input hex string
      */
     public static Integer[] convertFromHexStringToInts(String s) {
-        int numOfHexStrings = s.length() / 4 + (s.length() % 4 != 0 ? 1 : 0);
+        int numOfHexStrings = s.length() / 8 + (s.length() % 8 != 0 ? 1 : 0);
 
         String[] strings = new String[numOfHexStrings];
 
@@ -89,19 +89,14 @@ public class Tools {
     }
 
     public static String convertFromIntsToHexString(Integer[] ints) {
-        /*String hexStr = "";
-        
-        try {
-            
-            System.out.println("Created: " + hexStr);
+        String hexStr = "";
+        for (int i = 0; i < ints.length; i++) {
+            hexStr += Integer.toHexString(ints[i]);
+            System.out.println("Converted " + ints[i] + " to " + Integer.toHexString(ints[i]));
         }
-        catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            e.getMessage();
-            System.exit(1);
-        }*/
-        //return hexStr;
-        return new String(convertFromIntsToBytes(ints));
+        System.out.println("Converted to: " + hexStr);
+        
+        return hexStr;
     }
 
     private static void printByteArrayAsBinary(byte[] bytes) {

@@ -17,10 +17,10 @@ public class Main {
     private static String ivFile;
 
     public static void main(String[] args) {
-        String[] test = {"E","H","ECB","src/testplainfile.txt","src/testoutput1.txt","src/key.txt"};
+        //String[] test = {"E", "H", "ECB", "src/testplainfile.txt", "src/testoutput.txt", "src/key.txt"};
+        String[] test = {"D","H","ECB","src/cipher-ECB-H.txt","src/decrypt_test.txt","src/key.txt"};
         parseArgs(test);
         Integer[] key = readInFile(keyFile, true);
-        System.out.println("Key is : " + key[0] + " " + key[1] + " " + key[2] + " " + key[3]);
         Integer[] input = readInFile(inputFile, isHex);
         validateLength(key, 4, "key");
         Integer[] iv = null;
