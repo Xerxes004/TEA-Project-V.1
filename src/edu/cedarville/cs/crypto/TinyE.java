@@ -11,13 +11,15 @@ public class TinyE {
 
         ECB, CBC, CTR
     };
-    private final String DELTA = "9E3779B9";
+    //private final String DELTA = "9E3779B9";
+    private static final int DELTA = 0x9e3779b9;
     
     public static void main(String[] args) {
-        Integer[] plain = {1234, 238, 4832, 3};
-        Integer[] cipher = new Integer[plain.length];
-        Integer[] key1 = {42314,2345,27554,10};
-        Integer[] IV = {0};
+        System.out.println("Delta is : " + Integer.toHexString(DELTA));
+        /*//Integer[] plain = {1234, 238, 4832, 3};
+        //Integer[] cipher = new Integer[plain.length];
+        //Integer[] key1 = {42314,2345,27554,10};
+        //Integer[] IV = {0};
         Mode curMode = Mode.ECB;
         TinyE tea = new TinyE();
         cipher = tea.encrypt(plain, key1, curMode, IV);
@@ -30,7 +32,7 @@ public class TinyE {
         for(Integer i = 0; i < plain.length; i++){
             System.out.print(plain[i] + " ");            
         }
-        System.out.println("");        
+        System.out.println(""); */       
     }
 
     public Integer[] encrypt(Integer[] plaintext, Integer[] key, Mode mode, Integer[] iv) {
@@ -60,30 +62,30 @@ public class TinyE {
          cipherText = (L,R);
          */
         for(int m = 0; m < plaintext.length; m++) {
-            System.out.print(plaintext[m] + " ");
+            System.out.print(Integer.toHexString(plaintext[m]) + " ");
         }
         System.out.println("");
         
-        Integer[] ciphertext = new Integer[plaintext.length];
+        Integer[] ciphertext = new Integer[plaintext.length + (plaintext.length % 2 != 0 ? 1 : 0)];
 
-        Integer[] delta = convertFromHexStringToInts(DELTA);
+        //Integer[] delta = convertFromHexStringToInts(DELTA);
         
         int sum = 0;
         if(mode == Mode.ECB) {
-            for(Integer i = 0; i < plaintext.length ; i+=2) {
+            for(Integer i = 0; i < plaintext.length; i+=2) {
                 int L = plaintext[i];
                 int R = plaintext[i+1];
                 for(Integer j = 0; j < 32; j++) {
-                    sum += delta[0];
+                    sum += DELTA;
                     L += ((R << 4)+key[0])^(R+sum)^((R >>> 5)+key[1]);
                     R += ((L << 4)+key[2])^(L+sum)^((L >>> 5)+key[3]);    
                 }
                 sum = 0;
-                ciphertext[i] = L;
-                ciphertext[i+1] = R;
+                ciphertext[i + 1] = L;
+                ciphertext[i] = R;
             }
             for(int k = 0; k < ciphertext.length; k++) {
-                System.out.print(ciphertext[k] + " ");
+                System.out.print(Integer.toHexString(ciphertext[k]) + " ");
             }
             System.out.println("");
             
@@ -96,7 +98,7 @@ public class TinyE {
                 int L = plaintext[i]^xorer[0];
                 int R = plaintext[i+1]^xorer[1];
                 for(Integer j = 0; j < 32; j++) {
-                    sum += delta[0];
+                    sum += DELTA;
                     L += ((R << 4)+key[0])^(R+sum)^((R >>> 5)+key[1]);
                     R += ((L << 4)+key[2])^(L+sum)^((L >>> 5)+key[3]);    
                 }
@@ -106,9 +108,9 @@ public class TinyE {
                 ciphertext[i] = L;
                 ciphertext[i+1] = R;
             }
-            for(int k = 0; k < ciphertext.length; k++) {
-                System.out.print(ciphertext[k] + " ");
-            }
+            /*for(int k = 0; k < ciphertext.length; k++) {
+                System.out.print("Hex: " + Integer.toHexString(ciphertext[k]) + " ");
+            }*/
             System.out.println("");
              
         } else {
@@ -120,7 +122,7 @@ public class TinyE {
                 int L = xorer[0];
                 int R = xorer[1];
                 for(Integer j = 0; j < 32; j++) {
-                    sum += delta[0];
+                    sum += DELTA;
                     L += ((R << 4)+key[0])^(R+sum)^((R >>> 5)+key[1]);
                     R += ((L << 4)+key[2])^(L+sum)^((L >>> 5)+key[3]);    
                 }
@@ -159,8 +161,8 @@ public class TinyE {
         
         Integer[] plaintext = new Integer[ciphertext.length];
 
-        Integer[] delta = convertFromHexStringToInts(DELTA);
-        int sum = delta[0] << 5;
+        //Integer[] delta = convertFromHexStringToInts(DELTA);
+        int sum = DELTA << 5;
         if(mode == Mode.ECB) {
             for(Integer i = 0; i < ciphertext.length; i+=2) {
                 int L = ciphertext[i];
@@ -169,9 +171,9 @@ public class TinyE {
                     
                     R -= ((L << 4)+key[2])^(L+(int)sum)^((L >>> 5)+key[3]);
                     L -= ((R << 4)+key[0])^(R+(int)sum)^((R >>> 5)+key[1]);
-                    sum -= delta[0];
+                    sum -= DELTA;
                 }
-                sum = delta[0] << 5;
+                sum = DELTA << 5;
                 plaintext[i] = L;
                 plaintext[i+1] = R;
             }
@@ -187,9 +189,9 @@ public class TinyE {
                     
                     R -= ((L << 4)+key[2])^(L+(int)sum)^((L >>> 5)+key[3]);
                     L -= ((R << 4)+key[0])^(R+(int)sum)^((R >>> 5)+key[1]);
-                    sum -= delta[0];
+                    sum -= DELTA;
                 }
-                sum = delta[0] << 5;
+                sum = DELTA << 5;
                 plaintext[i] = L^xorer[0];
                 plaintext[i+1] = R^xorer[1];
                 xorer[0] = L;
@@ -207,9 +209,9 @@ public class TinyE {
                     
                     R -= ((L << 4)+key[2])^(L+(int)sum)^((L >>> 5)+key[3]);
                     L -= ((R << 4)+key[0])^(R+(int)sum)^((R >>> 5)+key[1]);
-                    sum -= delta[0];
+                    sum -= DELTA;
                 }
-                sum = delta[0] << 5;
+                sum = DELTA << 5;
                 plaintext[i] = L^ciphertext[i];
                 plaintext[i+1] = R^ciphertext[i+1];
                 xorer[0] += 1;                    

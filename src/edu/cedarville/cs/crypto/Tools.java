@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
 public class Tools {
-
     /**
      * Converts a byte[] array into an Integer[] array
      *
@@ -20,7 +19,7 @@ public class Tools {
             a = (j + 3 < bs.length ? bs[j + 3] : 0) << 24;
             b = (j + 2 < bs.length ? bs[j + 2] : 0) << 16;
             c = (j + 1 < bs.length ? bs[j + 1] : 0) << 8;
-            d = (j < bs.length ? bs[j] : 0);
+            d = (j     < bs.length ? bs[j]     : 0);
 
             ints[i] = a | b | c | d;
 
@@ -61,13 +60,12 @@ public class Tools {
         Integer[] ints = new Integer[numOfHexStrings];
         for (int i = 0; i < strings.length; i++) {
             BigInteger uncipheredInt = new BigInteger(strings[i], 16);
-            ints[strings.length - i - 1] = uncipheredInt.intValue();
-            System.out.println("::" + Integer.toHexString(ints[strings.length - i - 1]));
+            ints[i] = uncipheredInt.intValue();
+            System.out.println("::" + strings[i] + " : " + ints[i]);
         }
 
         return ints;
     }
-
     /**
      * Converts from an Integer[] array to a byte[] array
      *
@@ -79,10 +77,10 @@ public class Tools {
         int j = 0;
         for (int i = 0; i < ints.length; i++) {
 
-            bytes[j + 3] |= ints[i];
-            bytes[j + 2] |= ints[i] >>> 8;
-            bytes[j + 1] |= ints[i] >>> 16;
-            bytes[j] |= ints[i] >>> 24;
+            bytes[j + 3] |= ints[i] >>> 24;
+            bytes[j + 2] |= ints[i] >>> 16;
+            bytes[j + 1] |= ints[i] >>> 8;
+            bytes[j]     |= ints[i];
 
             j += 4;
         }
@@ -90,25 +88,28 @@ public class Tools {
     }
 
     public static String convertFromIntsToHexString(Integer[] ints) {
-        String hexStr = "";
+        /*String hexStr = "";
         
         try {
-            hexStr = new String (convertFromIntsToBytes(ints), "UTF-8");
+            
+            System.out.println("Created: " + hexStr);
         }
         catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             e.getMessage();
             System.exit(1);
-        }
-        return hexStr;
-        //return new String(convertFromIntsToBytes(ints));
+        }*/
+        //return hexStr;
+        return new String(convertFromIntsToBytes(ints));
     }
 
     private static void printByteArrayAsBinary(byte[] bytes) {
-        System.out.print("Printing ");
+        System.out.print("Printing");
         String[] strings = new String[bytes.length];
         for (int i = 0; i < bytes.length; i++) {
+            
             strings[i] = Integer.toBinaryString(bytes[i]);
+            
             String s = "";
             for (int j = 0; j < 8 - strings[i].length(); j++) {
                 s += "0";
@@ -141,7 +142,7 @@ public class Tools {
 
         printIntArrayAsBinary(testInt);*/
 
-        String s = "ae";
+        String s = "a56babcd00000000ffffffffabcdef01";
         printIntArrayAsBinary(convertFromHexStringToInts(s));
         //System.out.println("Hex string: " + convertFromIntsToHexString(convertFromHexStringToInts(s)));
     }
