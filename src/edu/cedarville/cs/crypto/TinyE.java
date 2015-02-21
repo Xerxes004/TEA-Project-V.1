@@ -69,7 +69,7 @@ public class TinyE {
         Integer[] ciphertext = new Integer[plaintext.length + (plaintext.length % 2 != 0 ? 1 : 0)];
 
         //Integer[] delta = convertFromHexStringToInts(DELTA);
-        
+        System.out.println("Key is : " + Integer.toHexString(key[0]));
         int sum = 0;
         if(mode == Mode.ECB) {
             for(Integer i = 0; i < plaintext.length; i+=2) {
@@ -81,8 +81,8 @@ public class TinyE {
                     R += ((L << 4)+key[2])^(L+sum)^((L >>> 5)+key[3]);    
                 }
                 sum = 0;
-                ciphertext[i + 1] = L;
-                ciphertext[i] = R;
+                ciphertext[i] = L;
+                ciphertext[i + 1] = R;
             }
             for(int k = 0; k < ciphertext.length; k++) {
                 System.out.print(Integer.toHexString(ciphertext[k]) + " ");
